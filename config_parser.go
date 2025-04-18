@@ -12,6 +12,7 @@ import (
 
 type Config struct {
 	KeycloakURL        string `json:"url"`
+	IssuerURL          string `json:"issuer_url"`
 	ClientID           string `json:"client_id"`
 	ClientSecret       string `json:"client_secret"`
 	KeycloakRealm      string `json:"keycloak_realm"`
@@ -25,6 +26,7 @@ type Config struct {
 	ClientIDFile          string `json:"client_id_file"`
 	ClientSecretFile      string `json:"client_secret_file"`
 	KeycloakURLEnv        string `json:"url_env"`
+	IssuerURLEnv          string `json:"issuer_url_env"`
 	ClientIDEnv           string `json:"client_id_env"`
 	ClientSecretEnv       string `json:"client_secret_env"`
 	KeycloakRealmEnv      string `json:"keycloak_realm_env"`
@@ -37,6 +39,7 @@ type Config struct {
 type keycloakAuth struct {
 	next               http.Handler
 	KeycloakURL        *url.URL
+	IssuerURL          *url URL
 	ClientID           string
 	ClientSecret       string
 	KeycloakRealm      string
@@ -111,6 +114,13 @@ func readConfigEnv(config *Config) error {
 			return errors.New("KeycloakURLEnv referenced but NOT set")
 		}
 		config.KeycloakURL = strings.TrimSpace(keycloakUrl)
+	}
+	if config.IssuerURLEnv != "" {
+		issuerUrl := os.Getenv(config.IssuerURLEnv)
+		if issuerUrl == "" {
+			return errors.New("IssuerURLEnv referenced but NOT set")
+		}
+		config.IssuerURL = strings.TrimSpace(issuerUrl)
 	}
 	if config.ClientIDEnv != "" {
 		clientId := os.Getenv(config.ClientIDEnv)
