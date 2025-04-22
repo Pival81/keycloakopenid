@@ -194,6 +194,11 @@ func New(uctx context.Context, next http.Handler, config *Config, name string) (
 		return nil, err
 	}
 
+	parsedIssuerURL, err := parseUrl(config.IssuerURL)
+	if err != nil {
+		return nil, err
+	}
+
 	if config.Scope == "" {
 		config.Scope = "openid"
 	}
@@ -226,6 +231,7 @@ func New(uctx context.Context, next http.Handler, config *Config, name string) (
 	return &keycloakAuth{
 		next:               next,
 		KeycloakURL:        parsedURL,
+		IssuerURL:          parsedIssuerURL,
 		ClientID:           config.ClientID,
 		ClientSecret:       config.ClientSecret,
 		KeycloakRealm:      config.KeycloakRealm,
