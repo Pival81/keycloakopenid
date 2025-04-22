@@ -39,7 +39,7 @@ type Config struct {
 type keycloakAuth struct {
 	next               http.Handler
 	KeycloakURL        *url.URL
-	IssuerURL          *url URL
+	IssuerURL          *url.URL
 	ClientID           string
 	ClientSecret       string
 	KeycloakRealm      string
